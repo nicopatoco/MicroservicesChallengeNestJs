@@ -8,6 +8,7 @@ import { CatalogServiceController } from './catalog-service.controller';
 import { CatalogServiceService } from './catalog-service.service';
 import { HealthController } from './health/health.controller';
 import { PingController } from './ping/ping.controller';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PingController } from './ping/ping.controller';
     TerminusModule,
     CorrelationModule,
     MetricsModule,
+    ProductsModule,
   ],
   controllers: [CatalogServiceController, HealthController, PingController],
   providers: [CatalogServiceService],

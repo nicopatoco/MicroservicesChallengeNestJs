@@ -8,20 +8,22 @@ import { HealthController } from './health/health.controller';
 import { PingController } from './ping/ping.controller';
 import { UsersServiceController } from './users-service.controller';
 import { UsersServiceService } from './users-service.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),
-
-  MongooseModule.forRootAsync({
-    inject: [ConfigService],
-    useFactory: (config: ConfigService) => ({
-      uri: config.get<string>('MONGO_URI'),
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        uri: config.get<string>('MONGO_URI'),
+      }),
     }),
-  }),
-
     TerminusModule,
     CorrelationModule,
-    MetricsModule,],
+    MetricsModule,
+    UsersModule,
+  ],
   controllers: [UsersServiceController, HealthController, PingController],
   providers: [UsersServiceService],
 })
