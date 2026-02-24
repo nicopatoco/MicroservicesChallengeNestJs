@@ -5,9 +5,9 @@ services:
     ports:
       - '3000:3000'
     environment:
-      USERS_URL: ${USERS_URL:-http://users:3001}
-      CATALOG_URL: ${CATALOG_URL:-http://catalog:3002}
-      ORDERS_URL: ${ORDERS_URL:-http://orders:3003}
+      USERS_URL: ${USERS_URL:-http://users-service:3001}
+      CATALOG_URL: ${CATALOG_URL:-http://catalog-service:3002}
+      ORDERS_URL: ${ORDERS_URL:-http://orders-service:3003}
       RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       - users-service
@@ -21,7 +21,7 @@ services:
     ports:
       - '3001:3001'
     environment:
-      MONGO_URI: ${USERS_MONGO_URI:-mongodb://users-mongo:27020/users}
+      MONGO_URI: ${USERS_MONGO_URI:-mongodb://users-mongo:27017/users}
       RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       - users-mongo
@@ -33,7 +33,7 @@ services:
     ports:
       - '3002:3002'
     environment:
-      MONGO_URI: ${CATALOG_MONGO_URI:-mongodb://catalog-mongo:27021/catalog}
+      MONGO_URI: ${CATALOG_MONGO_URI:-mongodb://catalog-mongo:27017/catalog}
       RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       - catalog-mongo
@@ -45,7 +45,7 @@ services:
     ports:
       - '3003:3003'
     environment:
-      MONGO_URI: ${ORDERS_MONGO_URI:-mongodb://orders-mongo:27022/orders}
+      MONGO_URI: ${ORDERS_MONGO_URI:-mongodb://orders-mongo:27017/orders}
       USERS_URL: ${USERS_URL:-http://users-service:3001}
       CATALOG_URL: ${CATALOG_URL:-http://catalog-service:3002}
       RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
