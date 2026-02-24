@@ -461,3 +461,12 @@ MIT
 <p align="center">
   Built with ❤️ for interview challenges — <strong>production-minded, not production-sized</strong>.
 </p>
+
+# deps
+
+npm i @nestjs/config @nestjs/axios axios opossum
+npm i @nestjs/mongoose mongoose
+npm i @nestjs/swagger swagger-ui-express
+npm i prom-client
+npm i @nestjs/terminus
+npm i -D supertest jest ts-jest @types/supertest

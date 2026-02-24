@@ -1,0 +1,89 @@
+services:
+  api-gateway:
+    build: .
+    command: npm run start:dev api-gateway
+    ports:
+      - '3000:3000'
+    environment:
+      USERS_URL: ${USERS_URL:-http://users:3001}
+      CATALOG_URL: ${CATALOG_URL:-http://catalog:3002}
+      ORDERS_URL: ${ORDERS_URL:-http://orders:3003}
+      RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
+    depends_on:
+      - users-service
+      - catalog-service
+      - orders-service
+      - rabbitmq
+
+  users-service:
+    build: .
+    command: npm run start:dev users-service
+    ports:
+      - '3001:3001'
+    environment:
+      MONGO_URI: ${USERS_MONGO_URI:-mongodb://users-mongo:27020/users}
+      RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
+    depends_on:
+      - users-mongo
+      - rabbitmq
+
+  catalog-service:
+    build: .
+    command: npm run start:dev catalog-service
+    ports:
+      - '3002:3002'
+    environment:
+      MONGO_URI: ${CATALOG_MONGO_URI:-mongodb://catalog-mongo:27021/catalog}
+      RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
+    depends_on:
+      - catalog-mongo
+      - rabbitmq
+
+  orders-service:
+    build: .
+    command: npm run start:dev orders-service
+    ports:
+      - '3003:3003'
+    environment:
+      MONGO_URI: ${ORDERS_MONGO_URI:-mongodb://orders-mongo:27022/orders}
+      USERS_URL: ${USERS_URL:-http://users-service:3001}
+      CATALOG_URL: ${CATALOG_URL:-http://catalog-service:3002}
+      RABBIT_URL: ${RABBIT_URL:-amqp://guest:guest@rabbitmq:5672}
+    depends_on:
+      - orders-mongo
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '5672:5672' # AMQP
+      - '15672:15672' # UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  users-mongo:
+    image: mongo:7
+    ports:
+      - '27020:27017'
+    volumes:
+      - users_data:/data/db
+
+  catalog-mongo:
+    image: mongo:7
+    ports:
+      - '27021:27017'
+    volumes:
+      - catalog_data:/data/db
+
+  orders-mongo:
+    image: mongo:7
+    ports:
+      - '27022:27017'
+    volumes:
+      - orders_data:/data/db
+
+volumes:
+  users_data:
+  catalog_data:
+  orders_data:
