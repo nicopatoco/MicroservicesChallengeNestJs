@@ -1,11 +1,11 @@
 import { Controller, Get, Header } from '@nestjs/common';
 import { MetricsService } from './metrics.service';
 
-@Controller('metrics')
+@Controller()
 export class MetricsController {
     constructor(private readonly metrics: MetricsService) { }
 
-    @Get('/metrics')
+    @Get('metrics')
     @Header('Content-Type', 'text/plain')
     metricsText() {
         return this.metrics.metricsText();
